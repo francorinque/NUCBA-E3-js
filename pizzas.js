@@ -45,9 +45,8 @@ const pizzas = [
 // valida que el input no tenga un 0-negativo, tampoco sea un numero id que en el arreglo pizzas no existe
 const minMax = value => {
   if (Number(value) <= 0 || Number(value) > pizzas.length) {
-    $mensajeError.classList.add('showMensaje');
-    $contenedorCards.innerHTML = '';
-    return;
+      $mensajeError.classList.add('showMensaje');
+      $contenedorCards.innerHTML = " ";
   } else {
     $mensajeError.classList.remove('showMensaje');
   }
@@ -55,17 +54,20 @@ const minMax = value => {
 
 
 const renderPizza = value =>{
-   let pizzaId = pizzas.find(pizza => pizza.id === Number(value));
-   $contenedorCards.innerHTML = `<article class="card">
-   <img class="card__img" src="${pizzaId.src}">
-   <div class="card__info">
-     <h2 class="card__title">${pizzaId.nombre}</h2>
-     <p class="card__ingredientes">INGREDIENTES: ${pizzaId.ing}</p>
-     <p class="card__price">$${pizzaId.precio}</p>
-     <a href="#" class="card__btn">COMPRAR</a>
-   </div>
- </article>`
+   let pizzaId = pizzas.find(pizza => {
+    pizza.id === Number(value)
+    $contenedorCards.innerHTML = `<article class="card">
+    <img class="card__img" src="${pizza.src}">
+    <div class="card__info">
+      <h2 class="card__title">${pizza.nombre}</h2>
+      <p class="card__ingredientes">INGREDIENTES: ${pizza.ing}</p>
+      <p class="card__price">$${pizza.precio}</p>
+      <a href="#" class="card__btn">COMPRAR</a>
+    </div>
+  </article>`
+   });
 }
+
 
 const saveLocalStorage = () =>{
   localStorage.setItem('pizzas',JSON.stringify(pizzas))
@@ -77,13 +79,14 @@ const addPizza = e => {
   e.preventDefault();
   const valueInput = $inputText.value.trim();
   minMax(valueInput);
-  renderPizza(valueInput);
+  saveLocalStorage()
+  if(!$mensajeError.classList.contains("showMensaje")){
+    renderPizza(valueInput);
+  }
   $form.reset();
 };
 
 const init = () => {
-  renderPizza($inputText.value)
-  saveLocalStorage()
   $form.addEventListener('submit', addPizza);
 };
 
