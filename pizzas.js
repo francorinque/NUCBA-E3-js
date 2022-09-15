@@ -43,51 +43,51 @@ let pizzas = [
 ];
 
 
-const saveLocalStorage = array =>{
-  localStorage.setItem("pizzas", JSON.stringify(array))
-}
+window.addEventListener('load', e=>{
 
-
-const buscarPizza = () =>{
-   let pizzaEncontrada = pizzas.find(pizza => pizza.id === Number($inputText.value))
-   const {nombre,src,precio,ing} = pizzaEncontrada;
-   return `<article class="card">
-        <img class="card__img" src="${src}">
-        <div class="card__info">
-          <h2 class="card__title">${nombre}</h2>
-          <p class="card__ingredientes">INGREDIENTES: ${ing}</p>
-          <p class="card__price">$${precio}</p>
-          <a href="#" class="card__btn">COMPRAR</a>
-        </div>
-      </article>`
-}
-
-
-// renderizar pizza
-const renderPizza = array => {
-  $contenedorCards.innerHTML = buscarPizza()
-}
-
-
-
-const addPizza = e => {
-  e.preventDefault();
-  const pizzaId = $inputText.value.trim();
-
-  if(Number(pizzaId) > pizzas.length){
-    $mensajeError.classList.add("showMensaje");
-    $contenedorCards.innerHTML = "";
+  const getPizza = JSON.parse(localStorage.getItem("myPizza"))
+  if(getPizza === null){
+    return;
   } else {
-    $mensajeError.classList.remove("showMensaje");
-    renderPizza(pizzas);
+    $contenedorCards.innerHTML = getPizza;
+    renderPizza(getPizza)
   }
 
-  $inputText.value = "";
-  saveLocalStorage(pizzas)
-}
+})
 
 
-const init = () => {
-  $form.addEventListener('submit', addPizza)
-}
-init();
+ $form.addEventListener('submit', e => {
+    e.preventDefault();
+
+    const datoUser = $inputText.value.trim();
+    if(Number(datoUser) > pizzas.length){
+      $mensajeError.classList.add("showMensaje");
+      $contenedorCards.innerHTML = "";
+      $form.reset();
+      return;
+    } else {
+      $mensajeError.classList.remove("showMensaje")
+    }
+    buscarPizza(pizzas)
+    $form.reset();
+ })
+
+
+ function buscarPizza(arreglo){
+  const pizzaEncontrada  = pizzas.find(pizza => pizza.id === Number($inputText.value));
+  localStorage.setItem("myPizza",JSON.stringify(pizzaEncontrada))
+  renderPizza(pizzaEncontrada)
+ }
+
+ function renderPizza(pizza){
+    const {nombre,src,precio,ing} = pizza
+    $contenedorCards.innerHTML = `<article class="card">
+    <img src=${src} class="card__img">
+    <div class="card__info">
+      <h2 class="card__title">${nombre}</h2>
+      <p class="card__ingredientes">Ingredientes: ${ing}</p>
+      <p class="card__precio">$${precio}</p>
+      <a href="#" class="card__btn">COMPRAR</a>
+    </div>
+  </article>`
+ }
