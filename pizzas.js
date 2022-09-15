@@ -4,7 +4,7 @@ const $form = d.querySelector('.form'),
   $contenedorCards = d.querySelector('.cards'),
   $mensajeError = d.querySelector('.mensaje');
 
-const pizzas = [
+let pizzas = [
   {
     id: 1,
     nombre: 'Pizza de chorizo y morrones',
@@ -42,55 +42,52 @@ const pizzas = [
   },
 ];
 
-// valida que el input no tenga un 0-negativo, tampoco sea un numero id que en el arreglo pizzas no existe
-const minMax = value => {
-  if (Number(value) <= 0 || Number(value) > pizzas.length) {
-      $mensajeError.classList.add('showMensaje');
-      $contenedorCards.innerHTML = " ";
-  } else {
-    $mensajeError.classList.remove('showMensaje');
-  }
-};
 
-
-const renderPizza = value =>{
-   let pizzaId = pizzas.find(pizza => {
-    pizza.id === Number(value)
-    $contenedorCards.innerHTML = `<article class="card">
-    <img class="card__img" src="${pizza.src}">
-    <div class="card__info">
-      <h2 class="card__title">${pizza.nombre}</h2>
-      <p class="card__ingredientes">INGREDIENTES: ${pizza.ing}</p>
-      <p class="card__price">$${pizza.precio}</p>
-      <a href="#" class="card__btn">COMPRAR</a>
-    </div>
-  </article>`
-   });
+const saveLocalStorage = array =>{
+  localStorage.setItem("pizzas", JSON.stringify(array))
 }
 
 
-const saveLocalStorage = () =>{
-  localStorage.setItem('pizzas',JSON.stringify(pizzas))
+const buscarPizza = () =>{
+   let pizzaEncontrada = pizzas.find(pizza => pizza.id === Number($inputText.value))
+   const {nombre,src,precio,ing} = pizzaEncontrada;
+   return `<article class="card">
+        <img class="card__img" src="${src}">
+        <div class="card__info">
+          <h2 class="card__title">${nombre}</h2>
+          <p class="card__ingredientes">INGREDIENTES: ${ing}</p>
+          <p class="card__price">$${precio}</p>
+          <a href="#" class="card__btn">COMPRAR</a>
+        </div>
+      </article>`
+}
+
+
+// renderizar pizza
+const renderPizza = array => {
+  $contenedorCards.innerHTML = buscarPizza()
 }
 
 
 
 const addPizza = e => {
   e.preventDefault();
-  const valueInput = $inputText.value.trim();
-  minMax(valueInput);
-  saveLocalStorage()
-  if(!$mensajeError.classList.contains("showMensaje")){
-    renderPizza(valueInput);
+  const pizzaId = $inputText.value.trim();
+
+  if(Number(pizzaId) > pizzas.length){
+    $mensajeError.classList.add("showMensaje");
+    $contenedorCards.innerHTML = "";
+  } else {
+    $mensajeError.classList.remove("showMensaje");
+    renderPizza(pizzas);
   }
-  $form.reset();
-};
+
+  $inputText.value = "";
+  saveLocalStorage(pizzas)
+}
+
 
 const init = () => {
-  $form.addEventListener('submit', addPizza);
-};
-
-
+  $form.addEventListener('submit', addPizza)
+}
 init();
-
-

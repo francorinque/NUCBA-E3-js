@@ -11,31 +11,17 @@
 <body>
 
   <header class="container header">
-
-    <section class="cards">
-      
-      <!-- <article class="card">
-        <img class="card__img" src="${pizzaId.src}">
-        <div class="card__info">
-          <h2 class="card__title">${pizzaId.nombre}</h2>
-          <p class="card__ingredientes">INGREDIENTES: ${pizzaId.ing}</p>
-          <p class="card__price">$${pizzaId.precio}</p>
-          <a href="#" class="card__btn">COMPRAR</a>
-        </div>
-      </article> -->
-     
-
-    </section>
-
+    <!-- contenedor cards -->
+    <section class="cards"></section>
+    <!-- title -->
     <h1>Buscá tu <b>pizza</b> 🍕</h1>
+    <!-- form -->
     <form  class="form">
-      <input type="number" class="input" required  autofocus>
+      <input type="number" class="input" required  autofocus min="1">
       <input type="submit" value="Buscar">
     </form>
-
+    <!-- msj error -->
     <div class="mensaje">NO CONTAMOS CON ESA PIZZA EN ESTOS MOMENTOS😕</div>
-
-   
   </header>
 
 
@@ -55,7 +41,6 @@
 
 
 
-<script src="https://code.iconify.design/3/3.0.0/iconify.min.js"></script>
 <script src="pizzas.js"></script> 
 </body>
 </html>
